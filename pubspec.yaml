@@ -11,7 +11,8 @@ dependencies:
     sdk: flutter
   go_router: ^16.0.0
   image_picker: ^1.1.2
-  flutter_chat_ui: ^2.7.0
+  flutter_chat_types: 3.6.2
+  flutter_chat_ui: 1.6.15
   uuid: ^4.5.1
   dio: ^5.8.0+1
   flutter_riverpod: ^2.6.1
