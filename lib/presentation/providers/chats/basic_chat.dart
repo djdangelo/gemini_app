@@ -1,4 +1,5 @@
 import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:gemini_app/config/gemini/gemini_impl.dart';
 import 'package:gemini_app/presentation/providers/chats/is_gemini_writing.dart';
 import 'package:gemini_app/presentation/providers/users/user_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,8 +11,12 @@ final uuid = Uuid();
 
 @riverpod
 class BasicChat extends _$BasicChat {
+  final gemini = GeminiImpl();
+  late User geminiUser;
+
   @override
   List<Message> build() {
+    geminiUser = ref.read(geminiUserProvider);
     return [];
   }
 
@@ -20,29 +25,37 @@ class BasicChat extends _$BasicChat {
   }
 
   void _addTextMessage(PartialText partialText, User user) {
-    final message = TextMessage(
-      author: user,
-      id: uuid.v4(),
-      text: partialText.text,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-    );
-    state = [message, ...state];
+    final message = _createTextMessage(partialText.text, user);
     _geminiTextResponse(partialText.text);
+    _setState(message);
   }
 
   void _geminiTextResponse(String prompt) async {
-    final isGeminiWriting = ref.watch(isGeminiWritingProvider.notifier);
-    final geminiUser = ref.watch(geminiUserProvider);
+    _setGeminiWritingStatus(true);
+    final response = await gemini.getResponse(prompt);
+    _setGeminiWritingStatus(false);
+    final message = _createTextMessage(response, geminiUser);
+    _setState(message);
+  }
 
-    isGeminiWriting.setIsWriting();
-    await Future.delayed(const Duration(seconds: 2));
-    isGeminiWriting.setIsNotWriting();
+  void _setGeminiWritingStatus(bool isWriting) {
+    final isGeminiWriting = ref.watch(isGeminiWritingProvider.notifier);
+    isWriting
+        ? isGeminiWriting.setIsWriting()
+        : isGeminiWriting.setIsNotWriting();
+  }
+
+  TextMessage _createTextMessage(String textMessage, User author) {
     final message = TextMessage(
-      author: geminiUser,
+      author: author,
       id: uuid.v4(),
-      text: 'HolaMundo',
+      text: textMessage,
       createdAt: DateTime.now().millisecondsSinceEpoch,
     );
+    return message;
+  }
+
+  void _setState(TextMessage message) {
     state = [message, ...state];
   }
 }

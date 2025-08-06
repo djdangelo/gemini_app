@@ -25,7 +25,6 @@ class BasicPromptScreen extends ConsumerWidget {
         onSendPressed: (flutter_chat_types.PartialText partialText) {
           final basicChatNotifier = ref.read(basicChatProvider.notifier);
           basicChatNotifier.addMessage(partialText: partialText, user: user);
-          print(partialText);
         },
         user: user,
         theme: const DarkChatTheme(),

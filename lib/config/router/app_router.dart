@@ -8,7 +8,7 @@ final appRouter = GoRouter(routes: [
     builder: (context, state) => const HomeScreen(),
   ),
   GoRoute(
-    path: 'basic-prompt',
+    path: '/basic-prompt',
     builder: (context, state) => const BasicPromptScreen(),
   )
 ]);

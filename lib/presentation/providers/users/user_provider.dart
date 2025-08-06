@@ -8,7 +8,7 @@ part 'user_provider.g.dart';
 @riverpod
 flutter_chat_types.User geminiUser(Ref ref) {
   const geminiUser = flutter_chat_types.User(
-    id: 'id_user',
+    id: 'id_gemini',
     firstName: 'Gimini',
   );
   return geminiUser;

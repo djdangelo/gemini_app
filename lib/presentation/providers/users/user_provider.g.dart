@@ -6,7 +6,7 @@ part of 'user_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$geminiUserHash() => r'14a0958fcca2c8017b984a174a4a88fac5aeb6f7';
+String _$geminiUserHash() => r'90986542d7262ba2d6461fd3368a706c0a9d3436';
 
 /// See also [geminiUser].
 @ProviderFor(geminiUser)
