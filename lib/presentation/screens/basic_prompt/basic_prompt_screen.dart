@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gemini_app/presentation/providers/chats/basic_chat.dart';
 import 'package:gemini_app/presentation/providers/chats/is_gemini_writing.dart';
 import 'package:gemini_app/presentation/providers/users/user_provider.dart';
+import 'package:gemini_app/presentation/widgets/chat/custom_botton_input.dart';
 
 class BasicPromptScreen extends ConsumerWidget {
   const BasicPromptScreen({super.key});
@@ -23,12 +24,24 @@ class BasicPromptScreen extends ConsumerWidget {
       body: Chat(
         messages: chatMessages,
         onSendPressed: (flutter_chat_types.PartialText partialText) {
-          final basicChatNotifier = ref.read(basicChatProvider.notifier);
-          basicChatNotifier.addMessage(partialText: partialText, user: user);
+          // final basicChatNotifier = ref.read(basicChatProvider.notifier);
+          // basicChatNotifier.addMessage(partialText: partialText, user: user);
         },
         user: user,
         theme: const DarkChatTheme(),
-        showUserNames: true,
+        customBottomWidget: CustomBottomInput(
+          onSend: (partialText, {images = const []}) {
+            final basicChatNotifier = ref.read(basicChatProvider.notifier);
+            basicChatNotifier.addMessage(
+                partialText: partialText, user: user, images: images);
+          },
+        ),
+        // showUserNames: true,
+        // onAttachmentPressed: () async {
+        //   ImagePicker picker = ImagePicker();
+        //   final List<XFile> images = await picker.pickMultiImage(limit: 4);
+        //   if (images.isEmpty) return;
+        // },
         typingIndicatorOptions: TypingIndicatorOptions(
             typingUsers: isGeminiWriting ? [geminiUser] : [],
             customTypingIndicator: const Center(
